@@ -1,0 +1,40 @@
+services:
+  db:
+    build: ./db
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 5306:3306
+    networks:
+      - application
+  web:
+    build: ./web
+    container_name: app
+    ports:
+      - 4000:4567
+    volumes:
+      - ./web:/app
+    networks:
+      - application
+  pma:
+    image: phpmyadmin:latest
+    container_name: pma
+    restart: always
+    ports:
+      -6666:80
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD="${DB_PASS}"
+      - PMA_ARBITRARY=1
+    networks:
+      - application
+
+networks:
+  application:
+    driver: bridge
