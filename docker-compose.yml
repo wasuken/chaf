@@ -8,13 +8,17 @@ services:
     volumes:
       - ./initdb.d:/docker-entrypoint-initdb.d
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    env_file:
+      - ./.env
     ports:
       - 5306:3306
     networks:
       - application
   web:
     build: ./web
-    container_name: app
+    container_name: web
+    env_file:
+      - ./.env
     ports:
       - 4000:4567
     volumes:
@@ -26,11 +30,13 @@ services:
     container_name: pma
     restart: always
     ports:
-      -6666:80
+      - 8080:80
+    env_file:
+      - ./.env
     environment:
       - PMA_HOST=db
       - PMA_USER=root
-      - PMA_PASSWORD="${DB_PASS}"
+      - PMA_PASSWORD=test
       - PMA_ARBITRARY=1
     networks:
       - application
