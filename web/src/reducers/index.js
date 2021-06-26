@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 
-import attendanceReducer from "./attendanceReducer";
+import AttendanceReducer from "./attendanceReducer";
+import UserReducer from "./userReducer";
 
-export default combineReducers({
-  attendanceReducer,
+const rootReducer = combineReducers({
+  AttendanceReducer,
+  UserReducer,
 });
+
+export default rootReducer;

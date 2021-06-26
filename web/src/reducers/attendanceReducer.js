@@ -25,7 +25,7 @@ export const fetchList = (path, name) => {
 	}));
 }
 
-export default function tasksReducer(state = initialState, action) {
+export default function AttendanceReducer(state = initialState, action) {
   switch (action.type) {
   case 'RECEIVE_GROUPS':
     return {

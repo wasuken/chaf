@@ -1,17 +1,45 @@
-import { useState } from 'react'
-import logo from '../logo.svg'
-import './App.css'
+import { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+import Header from '../components/Header';
+import Login from './Login';
+import Home from './Login';
+
+import logo from '../logo.svg';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const headers = [
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Login",
+      path: "/login",
+    }
+  ];
+  return (
+    <Router>
+      <div>
+        <Header headers={headers}/>
 
-   return (
-    <div className="App">
-      <header className="App-header">
-
-      </header>
-    </div>
-  )
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
