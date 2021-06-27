@@ -6,28 +6,33 @@ import {
   Link,
   Redirect
 } from "react-router-dom";
-import { connect } from 'react-redux';
 
-import Header from '../components/Header';
 import store from '../store'
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
 	login: state.UserReducer.login,
+	user: state.UserReducer.user,
   }
 }
-
-const Home = (props) => {
+const Profile = (props) => {
   if(!props.login){
 	return (<Redirect to="/login" />);
   }
   return (
-    <div>
-	  <div>
-		Home
+    <div class="container-fluid">
+	  <h3 class="row">Profile</h3>
+	  <div class="row">
+		<div>
+		  <span class="badge bg-primary">
+			Name
+		  </span>
+		  {props.user.name}
+		</div>
 	  </div>
     </div>
   );
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Profile);

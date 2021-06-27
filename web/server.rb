@@ -192,7 +192,7 @@ get '/api/group/:grp_id/users/' do |grp_id|
   rescue => e
     puts e.backtrace
     rst[:status] = 900
-    rst[:msg] = 'Error'
+    rst[:msg] = e.message
   ensure
     return rst.to_json
   end
@@ -208,6 +208,8 @@ get '/api/group/:grp_id' do |grp_id|
 
   rescue => e
     puts e.message
+    rst[:status] = 900
+    rst[:msg] = e.message
   ensure
     return rst.to_json
   end
@@ -223,6 +225,8 @@ post '/api/group' do
 
   rescue => e
     puts e.message
+    rst[:status] = 900
+    rst[:msg] = e.message
   ensure
     return rst.to_json
   end
@@ -238,6 +242,8 @@ put '/api/group' do
 
   rescue => e
     puts e.message
+    rst[:status] = 900
+    rst[:msg] = e.message
   ensure
     return rst.to_json
   end
@@ -253,6 +259,8 @@ delete '/api/group' do
 
   rescue => e
     puts e.message
+    rst[:status] = 900
+    rst[:msg] = e.message
   ensure
     return rst.to_json
   end
@@ -266,16 +274,15 @@ get '/api/attendances' do
   }
   begin
     token = params[:token]
+    raise 'Not Exists token.' unless token
     data = DB[:user_attendances]
              .join_table(:users)
              .where(token: token)
-    rst[:data] = data.map do |x|
-      {
-
-      }
-    end
+    rst[:data] = data
   rescue => e
     puts e.message
+    rst[:status] = 900
+    rst[:msg] = e.message
   ensure
     return rst.to_json
   end

@@ -1,7 +1,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+
+const mapStateToProps = (state) => {
+  return {
+	login: state.UserReducer.login,
+	user: state.UserReducer.user,
+  };
+}
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -13,9 +22,18 @@ const Header = (props) => {
           <ul className="navbar-nav">
             {
               props.headers.map(h => (
-                <li class="nav-item">
-                  <Link className="nav-link {h.active ? 'active' : ''}" to={h.path}>{h.name}</Link>
-                </li>
+                (<li class="nav-item">
+				   {
+					 h.onClick ?
+					   (<a className="nav-link"
+						   onClick={() => dispatch(h.onClick())}
+						>
+						  {h.name}
+						</a>)
+					   :
+					   <Link className="nav-link" to={h.path}>{h.name}</Link>
+				   }
+                 </li>)
               ))
             }
           </ul>
@@ -25,4 +43,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default connect(mapStateToProps)(Header);
