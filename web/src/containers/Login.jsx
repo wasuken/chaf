@@ -31,6 +31,7 @@ const handleLoginClick = (email, password) => {
 	  .then(
 		(json) => {
 		  if(json.status > 199 && json.status < 300){
+			localStorage.setItem('auth', JSON.stringify(json.data));
 			dispatch({
 			  type: 'RECEIVE_INFO',
 			  payload: json.data,

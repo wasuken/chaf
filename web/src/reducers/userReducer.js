@@ -20,6 +20,7 @@ export default function UserReducer(state = initialState, action){
 	  ...initialState
 	}
   case 'LOGOUT':
+	localStorage.removeItem('auth');
 	return {
 	  ...initialState
 	}

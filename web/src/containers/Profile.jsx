@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,15 +8,26 @@ import {
 } from "react-router-dom";
 
 import store from '../store'
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+
+import { fetchList } from '../reducers/attendanceReducer';
 
 const mapStateToProps = (state) => {
   return {
 	login: state.UserReducer.login,
 	user: state.UserReducer.user,
+	attendances: state.AttendanceReducer.user_attendances,
   }
 }
+const STATUS_LIST = [
+  '退勤',
+  '出勤',
+  '休憩',
+];
 const Profile = (props) => {
+  const dispatch = useDispatch();
+  dispatch(fetchList('api/user/attendances', 'USER_ATTENDANCES', props.user.token));
+  let status = STATUS_LIST[props.user.status] ?? '退勤';
   if(!props.login){
 	return (<Redirect to="/login" />);
   }
@@ -25,10 +36,18 @@ const Profile = (props) => {
 	  <h3 class="row">Profile</h3>
 	  <div class="row">
 		<div>
-		  <span class="badge bg-primary">
+		  <span class="badge bg-success">
 			Name
 		  </span>
 		  {props.user.name}
+		</div>
+	  </div>
+	  <div class="row">
+		<div>
+		  <span class="badge bg-primary">
+			Status
+		  </span>
+		  {status}
 		</div>
 	  </div>
     </div>
