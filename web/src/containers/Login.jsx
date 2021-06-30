@@ -9,47 +9,9 @@ import {
 
 import { useSelector, useDispatch } from 'react-redux'
 import { connect } from 'react-redux';
+import { handleLoginClick } from '../middleware/user';
 
 import Header from '../components/Header';
-
-const fetchUserLogin = (email, password) => {
-  const params = {
-	email: email,
-	password: password,
-  };
-  const esc = encodeURIComponent;
-  const query = Object.keys(params)
-		.map(k => esc(k) + '=' + esc(params[k]))
-		.join('&');
-  return fetch(`${import.meta.env.BASE_URL}api/user?${query}`);
-}
-
-const handleLoginClick = (email, password) => {
-  return function(dispatch) {
-    return fetchUserLogin(email, password)
-	  .then((res) => res.json())
-	  .then(
-		(json) => {
-		  if(json.status > 199 && json.status < 300){
-			localStorage.setItem('auth', JSON.stringify(json.data));
-			dispatch({
-			  type: 'RECEIVE_INFO',
-			  payload: json.data,
-			});
-		  }else{
-			dispatch({
-			  type: 'RECEIVE_INFO_INVALID',
-			  payload: 'Error',
-			})
-		  }
-		},
-		(error) => dispatch({
-		  type: 'RECEIVE_INFO_INVALID',
-		  payload: 'Error'
-		}),
-      );
-  };
-};
 
 const mapStateToProps = (state) => {
   return {

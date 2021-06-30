@@ -10,7 +10,9 @@ import {
 import store from '../store'
 import { connect, useDispatch } from 'react-redux';
 
-import { fetchList } from '../reducers/attendanceReducer';
+import { fetchList } from '../middleware/attendance';
+
+import { STATUS_LIST } from '../const';
 
 const mapStateToProps = (state) => {
   return {
@@ -19,11 +21,7 @@ const mapStateToProps = (state) => {
 	attendances: state.AttendanceReducer.user_attendances,
   }
 }
-const STATUS_LIST = [
-  '退勤',
-  '出勤',
-  '休憩',
-];
+
 const Profile = (props) => {
   const dispatch = useDispatch();
   dispatch(fetchList('api/user/attendances', 'USER_ATTENDANCES', props.user.token));

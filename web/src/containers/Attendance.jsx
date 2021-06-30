@@ -9,7 +9,8 @@ import {
 
 import store from '../store'
 import { connect, useDispatch } from 'react-redux';
-import { updateAttendance } from '../reducers/attendanceReducer';
+import { updateAttendance } from '../middleware/attendance';
+import { STATUS_LIST } from '../const';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,11 +25,6 @@ const Attendance = (props) => {
 	return (<Redirect to="/login" />);
   }
   const dispatch = useDispatch();
-  const STATUS_LIST = [
-	'退勤',
-	'出勤',
-	'休憩',
-  ];
   const [type, setType] = useState(0);
   const handleClickStatusUpdate = (t) => {
 	dispatch(updateAttendance({
@@ -59,7 +55,8 @@ const Attendance = (props) => {
           <span className="input-group-text">
 			仕事状態
 		  </span>
-		  <select className="form-select">
+		  <select className="form-select"
+				  onChange={(e) => setType(parseInt(e.target.value))}>
 			{
 			  STATUS_LIST.map((s, i) => {
 				if(!(nowStatus === i)){
@@ -76,7 +73,7 @@ const Attendance = (props) => {
 			  })
 			}
 		  </select>
-		  <button onClick={() => handleClickStatusUpdate(status)} class="btn btn-outline-primary">更新</button>
+		  <button onClick={() => handleClickStatusUpdate(type)} class="btn btn-outline-primary">更新</button>
 		</div>
 
 	  </div>

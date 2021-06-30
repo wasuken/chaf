@@ -15,17 +15,12 @@ import Home from './Home';
 import Profile from './Profile';
 import Attendance from './Attendance';
 
+import { fetchUserDispatch } from '../middleware/user';
+
+import { HEADERS } from '../const';
+
 import logo from '../logo.svg';
 import './App.css';
-
-const handleClickLogout = () => {
-  return function(dispatch){
-	dispatch({
-	  type: 'LOGOUT',
-	  payload: '',
-	})
-  }
-}
 
 const mapStateToProps = (state) => {
   return {
@@ -35,41 +30,6 @@ const mapStateToProps = (state) => {
 }
 
 function App(props){
-  const fetchUserLogin = (token) => {
-	const params = {
-	  token: token,
-	};
-	const esc = encodeURIComponent;
-	const query = Object.keys(params)
-		  .map(k => esc(k) + '=' + esc(params[k]))
-		  .join('&');
-	return fetch(`${import.meta.env.BASE_URL}api/user?${query}`);
-  }
-  const recon = (token) => {
-    return (dispatch) => {
-	  return fetchUserLogin(token)
-		.then((res) => res.json())
-		.then(
-		  (json) => {
-			if(json.status > 199 && json.status < 300){
-			  dispatch({
-				type: 'RECEIVE_INFO',
-				payload: json.data,
-			  });
-			}else{
-			  dispatch({
-				type: 'RECEIVE_INFO_INVALID',
-				payload: 'Error',
-			  })
-			}
-		  },
-		  (error) => dispatch({
-			type: 'RECEIVE_INFO_INVALID',
-			payload: 'Error'
-		  }),
-		);
-	}
-  };
   const dispatch = useDispatch();
   useEffect(() => {
 	const auth = localStorage.getItem('auth');
@@ -79,39 +39,11 @@ function App(props){
 		type: 'RECEIVE_INFO',
 		payload: authj,
 	  });
-	  dispatch(recon(authj.token))
+	  dispatch(fetchUserDispatch(authj.token))
 	}
   }, []);
-  const headers = [
-    {
-      name: "Home",
-      path: "/",
-	  type: 'LOGIN',
-    },
-    {
-      name: "Login",
-      path: "/login",
-	  type: 'LOGOUT',
-    },
-	{
-      name: "profile",
-      path: "/profile",
-	  type: 'LOGIN',
-    },
-	{
-	  name: "logout",
-	  path: "/profile",
-	  type: "LOGIN",
-	  onClick: handleClickLogout
-	},
-	{
-	  name: "attendance",
-	  path: "/attendance",
-	  type: "LOGIN",
-	},
-  ];
   const atype = props.login ? 'LOGIN' : 'LOGOUT';
-  const hs = headers.filter(h => {
+  const hs = HEADERS.filter(h => {
 	if(h.type === 'ALL' || h.type === atype){
 	  return h;
 	}

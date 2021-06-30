@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "pb": "vite build --mode production",
+    "bw": "vite build --watch",
     "serve": "vite preview"
   },
   "dependencies": {
