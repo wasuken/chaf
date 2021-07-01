@@ -24,6 +24,13 @@ export default function UserReducer(state = initialState, action){
 	return {
 	  ...initialState
 	}
+  case 'UPDATE_ATTENDANCE':
+	let n = {
+	  ...state,
+	};
+	n.user.status = action.payload.attendance_type;
+	return n;
+  case 'FAIL_UPDATE_ATTENDANCE':
   default:
     return state;
   }

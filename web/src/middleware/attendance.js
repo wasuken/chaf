@@ -8,7 +8,7 @@ export const fetchList = (path, name, token) => {
 		if(json.status >= 200 && json.status <= 299){
 		  dispatch({
 			type: `RECEIVE_${name}`,
-			paload: json.data,
+			payload: json.data,
 		  });
 		}
 	  })
@@ -32,7 +32,7 @@ export const updateAttendance = (params) => {
 		if(json.status >= 200 && json.status <= 299){
 		  dispatch({
 			type: `UPDATE_ATTENDANCE`,
-			paload: json.data,
+			payload: json.data,
 		  });
 		}
 	  })

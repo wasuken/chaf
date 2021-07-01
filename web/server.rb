@@ -381,7 +381,8 @@ post '/api/user/attendance' do
       attendance_type: type,
       value: value,
     }
-    DB[:user_attendances].insert(rec)
+    id = DB[:user_attendances].insert(rec)
+    rst[:data] = user_latest_attendance(user[:user_id])
   rescue => e
     puts e.message
     rst[:status] = 900

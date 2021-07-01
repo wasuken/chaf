@@ -17,15 +17,15 @@ export const HEADERS = [
 	type: 'LOGIN',
   },
   {
+	name: "attendance",
+	path: "/attendance",
+	type: "LOGIN",
+  },
+  {
 	name: "logout",
 	path: "/profile",
 	type: "LOGIN",
 	onClick: handleLogoutClick
-  },
-  {
-	name: "attendance",
-	path: "/attendance",
-	type: "LOGIN",
   },
 ];
 

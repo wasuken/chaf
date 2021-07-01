@@ -9,13 +9,17 @@ import {
 
 import store from '../store'
 import { connect, useDispatch } from 'react-redux';
-import { updateAttendance } from '../middleware/attendance';
+import { fetchList, updateAttendance } from '../middleware/attendance';
+import { fetchUserDispatch } from '../middleware/user';
 import { STATUS_LIST } from '../const';
 
 const mapStateToProps = (state) => {
+  const nu = {
+	...state.UserReducer.user,
+  }
   return {
 	login: state.UserReducer.login,
-	user: state.UserReducer.user,
+	user: nu,
 	attendances: state.AttendanceReducer.user_attendances
   }
 }
@@ -25,19 +29,15 @@ const Attendance = (props) => {
 	return (<Redirect to="/login" />);
   }
   const dispatch = useDispatch();
-  const [type, setType] = useState(0);
+  let initStatus = props.user.status === 0 ? 1 : 0 ;
+  const [type, setType] = useState(initStatus);
   const handleClickStatusUpdate = (t) => {
 	dispatch(updateAttendance({
 	  token: props.user.token,
 	  type: t,
 	}));
-  }
-  let nowStatus = props.user.status ?? 1;
-  let status = 0;
-  if(nowStatus === 1){
-	status = 0;
-  }else{
-	status = 1;
+	dispatch(fetchList('api/user/attendances', 'USER_ATTENDANCES', props.user.token))
+	dispatch(fetchUserDispatch(props.user.token));
   }
   return (
     <div className="container-fluid">
@@ -56,19 +56,11 @@ const Attendance = (props) => {
 			仕事状態
 		  </span>
 		  <select className="form-select"
-				  onChange={(e) => setType(parseInt(e.target.value))}>
+				  onChange={(e) => setType(e.target.value)}>
 			{
 			  STATUS_LIST.map((s, i) => {
-				if(!(nowStatus === i)){
-				  if(status === i){
-					return (<option value={i} selected>{s}</option>);
-				  }else{
-					return (<option value={i}>{s}</option>);
-				  }
-				}else{
-				  return (
-					<p></p>
-				  );
+				if(props.user.status !== i){
+				  return (<option value={i} key={i}>{s}</option>);
 				}
 			  })
 			}

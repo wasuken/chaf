@@ -26,8 +26,6 @@ export default function AttendanceReducer(state = initialState, action) {
       ...state,
       user_attendances: action.payload
     };
-  case 'UPDATE_ATTENDANCE':
-  case 'FAIL_UPDATE_ATTENDANCE':
   default:
     return state;
   }
